@@ -1,2 +1,2 @@
 # javascript-sandbox
-Simple javascript usages and components.
+Examples/components for learning javascript

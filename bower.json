@@ -1,0 +1,13 @@
+{
+  "name": "javascript-sandbox",
+  "description": "Examples/components for learning javascript",
+  "version": "1.0.0",
+  "readme": "README.md",
+  "authors": [
+    "Allan BURDAJEWICZ <allan.burdajewicz@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Dohbedoh/javascript-sandbox.git"
+  }
+}
