@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spin Sample</title>
+
+    <!-- Jquery libraries -->
+    <!--<script  src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js" type="text/javascript"></script>-->
+    <script>
+        var worker;
+
+        /**
+         * Stop the worker.
+         */
+        function startWorker() {
+
+            if(typeof(Worker) !== "undefined") {
+
+                if(typeof(worker) == "undefined") {
+                    worker = new Worker("./worker.js");
+
+                    // Watch for messages from the worker
+                    worker.addEventListener('message', function(e) {
+                        var data = e.data;
+                        console.log('Caller: received a message from worker');
+                        console.log(data);
+                        switch(data.cmd) {
+                            case 'start':
+                                document.getElementById('result-div').innerHTML = "Start working...!";
+                                //$('#result-div').get(0).innerHTML = "Start working...!";
+                                break;
+                            case 'progress':
+                                document.getElementById('result-div').innerHTML = "Working: " + data.msg + ' iterations, ' + data.time + 'ms';
+                                //$('#result-div').get(0).innerHTML = "Working: " + data.msg + ' iterations, ' + data.time + 'ms';
+                                break;
+                            case 'completed':
+                                document.getElementById('result-div').innerHTML = "Task completed!";
+                                //$('#result-div').get(0).innerHTML = "Task completed!";
+                                break;
+                            default:
+                                document.getElementById('result-div').innerHTML = data.msg;
+                                //$('#result-div').get(0).innerHTML = data.msg;
+                                break;
+                        }
+                    }, false);
+                }
+            } else {
+                document.getElementById('result-div').innerHTML = data.msg;
+                //$('#result-div').get(0).innerHTML = "Workers not supported by the browser!"
+            }
+        }
+
+        /**
+         * Stop the worker.
+         */
+        function stopWorker() {
+            if(typeof(worker) !== "undefined") {
+                worker.terminate();
+                worker = undefined;
+            }
+        }
+
+        /**
+         * JQuery
+         */
+//        $(document).ready(function() {
+//            $("#button1").click(function(e) {
+//                e.preventDefault();
+//                startWorker();
+//                worker.postMessage({cmd: "doThis"});
+//            });
+//            $("#button2").click(function(e) {
+//                e.preventDefault();
+//                stopWorker();
+//            });
+//            $("#button3").click(function(e) {
+//                e.preventDefault();
+//                stopWorker();
+//                startWorker();
+//                worker.postMessage({cmd: "doThis"});
+//            });
+//        });
+
+        /**
+         * Pure Javascript.
+         */
+        document.addEventListener("DOMContentLoaded", function(event) {
+
+            document.getElementById("button1").addEventListener('click', function(e) {
+                e.preventDefault();
+                startWorker();
+                worker.postMessage({cmd: "doThis"});
+            });
+
+            document.getElementById("button2").addEventListener('click', function(e) {
+                e.preventDefault();
+                stopWorker();
+            });
+
+            document.getElementById("button3").addEventListener('click', function(e) {
+                e.preventDefault();
+                stopWorker();
+                startWorker();
+                worker.postMessage({cmd: "doThis"});
+            });
+        });
+    </script>
+</head>
+    <body>
+        <h1>Sample use os web workers</h1>
+
+        <p style="text-align: center;">
+            <br/>
+            <input type="button" id="button1" value="Start Worker">
+            <input type="button" id="button2" value="Stop Worker">
+            <input type="button" id="button3" value="Restart Worker">
+            <br/>
+        </p>
+        <div id='result-div' class='result-div' style="position: absolute; top: 50%; left: 50%; text-align: center;"></div>
+
+    </body>
+</html>
